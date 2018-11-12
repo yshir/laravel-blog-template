@@ -11,8 +11,8 @@
 |
 */
 
-Route::get('/', function () { return redirect('/posts'); });
-
 // posts
-Route::get('/posts', 'PostController@index')->name('posts.index');
+Route::get('/', 'PostController@index')->name('posts.index');
+Route::get('/categories/{slug}', 'PostController@category')->name('posts.category');
+Route::get('/tags/{slug}', 'PostController@tag')->name('posts.tag');
 Route::get('/post/{slug}', 'PostController@show')->name('posts.show');
