@@ -23,6 +23,23 @@ class Post extends Model
         'published_at',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo('App\Model\Category')->withDefault([
+            'name' => '未分類',
+        ]);
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany('App\Model\Tag');
+    }
+
     public function scopePublished($query)
     {
         return $query->where('status', 'published')->where('published_at', '<=', Carbon::now());
