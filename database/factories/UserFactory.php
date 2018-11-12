@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,7 @@ $factory->define(App\User::class, function (Faker $faker) {
         'avatar' => $faker->imageUrl($width = 640, $height = 480, $category = 'cats', $randomize = true, $word = null),
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
-        'password' => 'pass',
+        'password' => Hash::make('testpass'),
         'remember_token' => str_random(10),
     ];
 });

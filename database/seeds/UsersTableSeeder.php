@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UsersTableSeeder extends Seeder
 {
@@ -15,7 +16,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'system',
             'email' => 'system@example.com',
             'role' => 'system',
-            'password' => 'pass',
+            'password' => Hash::make('testpass'),
             'email_verified_at' => now(),
             'remember_token' => str_random(10),
             'created_at' => now(),
@@ -25,7 +26,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'admin',
             'email' => 'admin@example.com',
             'role' => 'admin',
-            'password' => 'pass',
+            'password' => Hash::make('testpass'),
             'email_verified_at' => now(),
             'remember_token' => str_random(10),
             'created_at' => now(),
@@ -35,7 +36,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'user',
             'email' => 'user@example.com',
             'role' => 'user',
-            'password' => 'pass',
+            'password' => Hash::make('testpass'),
             'email_verified_at' => now(),
             'remember_token' => str_random(10),
             'created_at' => now(),
@@ -45,7 +46,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'editor',
             'email' => 'editor@example.com',
             'role' => 'editor',
-            'password' => 'pass',
+            'password' => Hash::make('testpass'),
             'email_verified_at' => now(),
             'remember_token' => str_random(10),
             'created_at' => now(),
