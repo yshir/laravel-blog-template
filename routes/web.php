@@ -1,5 +1,11 @@
 <?php
 
+Route::get('dashboard', function() { return view('dashboard.index'); })->name('dashboard.index');
+Route::get('dashboard/posts', function() { return view('dashboard.posts.index'); })->name('dashboard.posts.index');
+Route::get('dashboard/users', function() { return view('dashboard.users.index'); })->name('dashboard.users.index');
+Route::get('dashboard/categories', function() { return view('dashboard.categories.index'); })->name('dashboard.categories.index');
+Route::get('dashboard/tags', function() { return view('dashboard.tags.index'); })->name('dashboard.tags.index');
+
 // auth
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
