@@ -6,6 +6,7 @@ use App\Model\Category;
 use App\Model\Post;
 use App\Model\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use SebastianBergmann\Environment\Console;
 
 class PostController extends Controller
@@ -36,13 +37,17 @@ class PostController extends Controller
 
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('posts.create', ['categories' => $categories]);
     }
 
 
     public function store(Request $request)
     {
-        //
+        $inputs = $request->all();
+        $inputs['user_id'] = Auth::id();
+        Post::create($inputs);
+        return redirect('/');
     }
 
     public function show($slug)
@@ -54,7 +59,8 @@ class PostController extends Controller
 
     public function edit($id)
     {
-        //
+        $post = Post::where('slug', $slug)->firstOrFail();
+        return view('posts.edit', ['post' => $post]);
     }
 
 

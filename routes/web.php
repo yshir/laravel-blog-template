@@ -14,7 +14,9 @@ Route::get('/post/{slug}', 'PostController@show')->name('posts.show');
 
 // editor-higher
 Route::group(['middleware' => ['auth', 'can:editor-higher']], function () {
-  
+  Route::get('/posts/create', 'PostController@create')->name('posts.create');
+  Route::post('/posts/store', 'PostController@store')->name('posts.store');
+  Route::get('/posts/edit', 'PostController@edit')->name('posts.edit');
 });
 
 // user-higher
