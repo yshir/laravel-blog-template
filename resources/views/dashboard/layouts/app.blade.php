@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 	<meta charset="utf-8" />
 	<link rel="apple-touch-icon" sizes="76x76" href="{{ asset('paper-dashboard/img/apple-icon.png') }}">
@@ -31,6 +31,7 @@
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
     <link href="{{ asset('paper-dashboard/css/themify-icons.css') }}" rel="stylesheet">
 
+    @yield('add_css')
 </head>
 <body>
 
@@ -42,48 +43,42 @@
 		Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
 	-->
 
-    <div class="sidebar" data-background-color="white" data-active-color="danger">
-
-        <!--
-            Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
-            Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
-        -->
-    
+    <div class="sidebar" data-background-color="black" data-active-color="success">
             <div class="sidebar-wrapper">
                 <div class="logo">
-                    <a href="http://www.creative-tim.com" class="simple-text">
-                        Creative Tim
+                    <a href="{{ route('posts.index') }}" class="simple-text">
+                        Yurubo title me
                     </a>
                 </div>
     
                 <ul class="nav">
-                    <li class="active">
+                    <li class="@yield('dashboard_sidebar_class')">
                         <a href="{{ route('dashboard.index') }}">
                             <i class="ti-panel"></i>
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <li>
+                    <li class="@yield('users_sidebar_class')">
                         <a href="{{ route('dashboard.users.index') }}">
                             <i class="ti-user"></i>
                             <p>Users</p>
                         </a>
                     </li>
-                    <li>
+                    <li class="@yield('posts_sidebar_class')">
                         <a href="{{ route('dashboard.posts.index') }}">
                             <i class="ti-write"></i>
                             <p>Posts</p>
                         </a>
                     </li>
-                    <li>
+                    <li class="@yield('categories_sidebar_class')">
                         <a href="{{ route('dashboard.categories.index') }}">
                             <i class="ti-view-list-alt"></i>
                             <p>Categories</p>
                         </a>
                     </li>
-                    <li>
+                    <li class="@yield('tags_sidebar_class')">
                         <a href="{{ route('dashboard.tags.index') }}">
-                            <i class="ti-view-list-alt"></i>
+                            <i class="ti-tag"></i>
                             <p>Tags</p>
                         </a>
                     </li>
@@ -101,14 +96,14 @@
                         <span class="icon-bar bar2"></span>
                         <span class="icon-bar bar3"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Dashboard</a>
+                    <a class="navbar-brand" href="{{ route('dashboard.index') }}">Dashboard</a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a href="{{ route('dashboard.posts.create') }}">
                                 <i class="ti-write"></i>
-								<p>New Posts</p>
+                                <p>New Posts</p>
                             </a>
                         </li>
                         {{-- <li class="dropdown">
@@ -138,8 +133,24 @@
             </div>
         </nav>
         
-        @yield('content')
+        <div class="content">
+            <div class="container-fluid">
+                {{-- Flash message --}}
+                @if (session('flash'))
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="alert alert-success" style="border-radius: 4px;">
+                                <p><i class="ti-face-smile" style="margin-right: 10px;"></i>{{ session('flash') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
+                @yield('content')
+
+            </div>
+        </div>
+        
         <footer class="footer">
             <div class="container-fluid">
                 <nav class="pull-left">
@@ -195,5 +206,7 @@
           </script>
     </div>
 </div>
+
+@yield('add_script')
 </body>
 </html>

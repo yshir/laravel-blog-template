@@ -1,10 +1,47 @@
 <?php
 
-Route::get('dashboard', function() { return view('dashboard.index'); })->name('dashboard.index');
-Route::get('dashboard/posts', function() { return view('dashboard.posts.index'); })->name('dashboard.posts.index');
-Route::get('dashboard/users', function() { return view('dashboard.users.index'); })->name('dashboard.users.index');
-Route::get('dashboard/categories', function() { return view('dashboard.categories.index'); })->name('dashboard.categories.index');
-Route::get('dashboard/tags', function() { return view('dashboard.tags.index'); })->name('dashboard.tags.index');
+Route::prefix('dashboard')->namespace('Dashboard')->group(function() {
+  // admin-higher
+  Route::group(['middleware' => ['auth', 'can:admin-higher']], function () {
+    Route::get('/users', 'UserController@index')->name('dashboard.users.index');
+    Route::get('/users/edit/{id}', 'UserController@edit')->name('dashboard.users.edit');
+    Route::put('/users/edit/{id}', 'UserController@update')->name('dashboard.users.update');
+    Route::delete('/users/edit/{id}', 'UserController@destroy')->name('dashboard.users.destroy');
+  });
+
+  // user-higher
+  Route::group(['middleware' => ['auth', 'can:editor-higher']], function () {
+    Route::get('/users/create', 'UserController@create')->name('dashboard.users.create');
+    Route::post('/users/create', 'UserController@store')->name('dashboard.users.store');
+  });
+  
+  // editor-higher
+  Route::group(['middleware' => ['auth', 'can:editor-higher']], function () {
+    Route::get('/', function() { return view('dashboard.index'); })->name('dashboard.index');
+
+    Route::get('/posts', 'PostController@index')->name('dashboard.posts.index');
+    // Route::get('/posts/show', 'PostController@show')->name('dashboard.posts.show');
+    Route::get('/posts/create', 'PostController@create')->name('dashboard.posts.create');
+    Route::post('/posts', 'PostController@store')->name('dashboard.posts.store');
+    Route::get('/posts/edit/{id}', 'PostController@edit')->name('dashboard.posts.edit');
+    Route::put('/posts/{id}', 'PostController@update')->name('dashboard.posts.update');
+    Route::delete('/posts/{id}', 'PostController@destroy')->name('dashboard.posts.destroy');
+
+    Route::get('/categories', 'CategoryController@index')->name('dashboard.categories.index');
+    Route::get('/categories/create', 'CategoryController@create')->name('dashboard.categories.create');
+    Route::post('/categories', 'CategoryController@store')->name('dashboard.categories.store');
+    Route::get('/categories/edit/{id}', 'CategoryController@edit')->name('dashboard.categories.edit');
+    Route::put('/categories/{id}', 'CategoryController@update')->name('dashboard.categories.update');
+    Route::delete('/categories/{id}', 'CategoryController@destroy')->name('dashboard.categories.destroy');
+    
+    Route::get('/tags', 'TagController@index')->name('dashboard.tags.index');
+    Route::get('/tags/create', 'TagController@create')->name('dashboard.tags.create');
+    Route::post('/tags', 'TagController@store')->name('dashboard.tags.store');
+    Route::get('/tags/edit/{id}', 'TagController@edit')->name('dashboard.tags.edit');
+    Route::put('/tags/{id}', 'TagController@update')->name('dashboard.tags.update');
+    Route::delete('/tags/{id}', 'TagController@destroy')->name('dashboard.tags.destroy');
+  });
+});
 
 // auth
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');

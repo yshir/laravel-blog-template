@@ -18,7 +18,7 @@ $factory->define(App\User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'role' => $faker->randomElement(['system', 'admin', 'user', 'editor']),
-        'avatar' => $faker->imageUrl($width = 640, $height = 480, $category = 'cats', $randomize = true, $word = null),
+        'avatar' => $faker->imageUrl($width = 640, $height = 480, $category = null, $randomize = true, $word = null),
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'password' => Hash::make('testpass'),

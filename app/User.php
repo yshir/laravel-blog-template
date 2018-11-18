@@ -11,11 +11,18 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $fillable = [
-        'name', 'avatar', 'role', 'email', 'password',
+        'name',
+        'nickname',
+        'avatar',
+        'sns_links',
+        'role',
+        'email',
+        'password',
     ];
 
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     public function posts()
