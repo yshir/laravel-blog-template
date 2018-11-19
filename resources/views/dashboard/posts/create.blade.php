@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-lg-4 col-md-5">
+    {{-- <div class="col-lg-4 col-md-5">
         <div class="card card-post">
             <div class="image">
                 <img src="{{ asset('paper-dashboard/img/background.jpg') }}" alt="..."/>
@@ -15,9 +15,9 @@
                 </p>
             </div>
         </div>
-    </div>
+    </div> --}}
 
-    <div class="col-lg-8 col-md-7">
+    <div class="col-md-12">
         <div class="card">
             <div class="header">
                 <h4 class="title">Create Post</h4>
@@ -43,12 +43,12 @@
                         <div class="col-md-12">
                             <label for="slug">URL</label>
                             <div class="row">
-                                <div class="col-xs-3">
+                                <div class="col-xs-4">
                                     <div class="form-group">
                                         <p class="form-control">https://test.com/post/</p>
                                     </div>
                                 </div>
-                                <div class="col-xs-9">
+                                <div class="col-xs-8">
                                     <div class="form-group">
                                         <input type="slug" name="slug" class="form-control border-input" placeholder="Slug" value="{{ old('slug') }}" required>
                                         @if ($errors->has('slug'))
@@ -88,7 +88,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="meta_description">Meta Description (Max: 300)</label>
-                                <textarea name="meta_description" class="form-control" placeholder="Meta description..." rows="3">{{ old('meta_description') }}</textarea>
+                                <textarea name="meta_description" class="form-control" placeholder="Meta description..." rows="4">{{ old('meta_description') }}</textarea>
                                 @if ($errors->has('meta_description'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('meta_description') }}</strong>
@@ -102,7 +102,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label name="body">Body</label>
-                                <textarea name="body" class="form-control" placeholder="Here can be your nice text" rows="10" required>{{ old('body') }}</textarea>
+                                <textarea id="body" name="body" class="form-control" placeholder="Here can be your nice text" rows="20" required>{{ old('body') }}</textarea>
                                 @if ($errors->has('body'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('body') }}</strong>
@@ -130,7 +130,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="head_html">Head HTML (optional)</label>
-                                <textarea name="head_html" class="form-control" placeholder="<script>\nfoo?$!%$bar\n</script>" rows="3" {{ $canWriteAll ? '' : 'readonly' }}>{{ old('head_html') }}</textarea>
+                                <textarea name="head_html" class="form-control" placeholder="<script>\nfoo?$!%$bar\n</script>" rows="4" {{ $canWriteAll ? '' : 'readonly' }}>{{ old('head_html') }}</textarea>
                                 @if ($errors->has('head_html'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('head_html') }}</strong>
@@ -144,7 +144,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="footer_html">Footer HTML (optional)</label>
-                                <textarea name="footer_html" class="form-control" placeholder="<script>\nfoo?$!%$bar\n</script>" rows="3" {{ $canWriteAll ? '' : 'readonly' }}>{{ old('footer_html') }}</textarea>
+                                <textarea name="footer_html" class="form-control" placeholder="<script>\nfoo?$!%$bar\n</script>" rows="4" {{ $canWriteAll ? '' : 'readonly' }}>{{ old('footer_html') }}</textarea>
                                 @if ($errors->has('footer_html'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('footer_html') }}</strong>
@@ -195,6 +195,18 @@
 @endsection
 
 @section('add_script')
+<script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
+<script>
+tinymce.init({
+    selector:'textarea#body',
+    branding: false,
+    plugins: "link image code jbimages",
+    menubar: false,
+    toolbar: 'undo redo | styleselect | bold italic blockquote | link image jbimages | code',
+    relative_urls: false,
+});
+</script>
+
 <script>
 // ページを離れようとした際に、アラートを表示する
 var onBeforeunloadHandler = function(e) {

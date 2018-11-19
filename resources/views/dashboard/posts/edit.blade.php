@@ -159,7 +159,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label name="body">Body</label>
-                                        <textarea name="body" class="form-control" placeholder="Here can be your nice text" rows="10" required>{{ $post->body }}</textarea>
+                                        <textarea id="body" name="body" class="form-control" placeholder="Here can be your nice text" rows="10" required>{{ $post->body }}</textarea>
                                         @if ($errors->has('body'))
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $errors->first('body') }}</strong>
@@ -254,6 +254,18 @@
 @endsection
 
 @section('add_script')
+<script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
+<script>
+tinymce.init({
+    selector:'textarea#body',
+    branding: false,
+    plugins: "link image code jbimages",
+    menubar: false,
+    toolbar: 'undo redo | styleselect | bold italic blockquote | link image jbimages | code',
+    relative_urls: false,
+});
+</script>
+
 <script>
 // ページを離れようとした際に、アラートを表示する
 var onBeforeunloadHandler = function(e) {
