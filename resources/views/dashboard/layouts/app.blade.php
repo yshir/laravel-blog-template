@@ -6,7 +6,7 @@
 	<link rel="icon" type="image/png" sizes="96x96" href="{{ asset('paper-dashboard/img/favicon.png') }}">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-    <title>test</title>
+    <title>Dashboard</title>
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
@@ -106,27 +106,16 @@
                                 <p>New Posts</p>
                             </a>
                         </li>
-                        {{-- <li class="dropdown">
+                        <li class="dropdown">
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="ti-bell"></i>
-                                    <p class="notification">5</p>
-									<p>Notifications</p>
+                                    <i class="ti-settings"></i>
+									<p>Settings</p>
 									<b class="caret"></b>
                               </a>
                               <ul class="dropdown-menu">
-                                <li><a href="#">Notification 1</a></li>
-                                <li><a href="#">Notification 2</a></li>
-                                <li><a href="#">Notification 3</a></li>
-                                <li><a href="#">Notification 4</a></li>
-                                <li><a href="#">Another notification</a></li>
+                                <li><a href="{{ route('logout') }}">Logout</a></li>
                               </ul>
                         </li>
-						<li>
-                            <a href="#">
-								<i class="ti-settings"></i>
-								<p>Settings</p>
-                            </a>
-                        </li> --}}
                     </ul>
 
                 </div>
