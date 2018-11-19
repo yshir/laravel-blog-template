@@ -29,11 +29,11 @@ class PostController extends Controller
         return view('dashboard.posts.index', ['posts' => $posts]);
     }
 
-    // public function show($slug)
-    // {
-    //     $post = Post::published()->where('slug', $slug)->firstOrFail();
-    //     return view('dashboard.posts.show', ['post' => $post]);
-    // }
+    public function show($slug)
+    {
+        $post = Post::where('slug', $slug)->firstOrFail();
+        return view('posts.show', ['post' => $post]);
+    }
 
     public function create()
     {

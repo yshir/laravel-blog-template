@@ -24,7 +24,7 @@
             <td>{{ isset($post->category) ? $post->category->name : '未分類' }}</td>
             <td>{{ $post->status }}</td>
             <td>{{ $post->published_at }}</td>
-            <td><a href="{{ route('posts.show', ['id' => $post->slug]) }}">Show</a></td>
+            <td><a href="{{ route('dashboard.posts.show', ['slug' => $post->slug]) }}">Show</a></td>
             <td><a href="{{ route('dashboard.posts.edit', ['id' => $post->id]) }}">Edit</a></td>
         </tr>
       @endforeach

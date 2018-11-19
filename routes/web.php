@@ -22,7 +22,7 @@ Route::prefix('dashboard')->namespace('Dashboard')->group(function() {
     Route::get('/profile/edit', 'UserController@edit')->name('dashboard.profile.edit');
 
     Route::get('/posts', 'PostController@index')->name('dashboard.posts.index');
-    // Route::get('/posts/show', 'PostController@show')->name('dashboard.posts.show');
+    Route::get('/posts/preview/{slug}', 'PostController@show')->name('dashboard.posts.show');
     Route::get('/posts/create', 'PostController@create')->name('dashboard.posts.create');
     Route::post('/posts', 'PostController@store')->name('dashboard.posts.store');
     Route::get('/posts/edit/{id}', 'PostController@edit')->name('dashboard.posts.edit');
