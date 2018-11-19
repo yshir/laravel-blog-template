@@ -58,12 +58,14 @@
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <li class="@yield('users_sidebar_class')">
-                        <a href="{{ route('dashboard.users.index') }}">
-                            <i class="ti-user"></i>
-                            <p>Users</p>
-                        </a>
-                    </li>
+                    @can('admin-higher')
+                        <li class="@yield('users_sidebar_class')">
+                            <a href="{{ route('dashboard.users.index') }}">
+                                <i class="ti-user"></i>
+                                <p>Users</p>
+                            </a>
+                        </li>
+                    @endcan
                     <li class="@yield('posts_sidebar_class')">
                         <a href="{{ route('dashboard.posts.index') }}">
                             <i class="ti-write"></i>

@@ -4,15 +4,15 @@ Route::prefix('dashboard')->namespace('Dashboard')->group(function() {
   // admin-higher
   Route::group(['middleware' => ['auth', 'can:admin-higher']], function () {
     Route::get('/users', 'UserController@index')->name('dashboard.users.index');
+    Route::get('/users/create', 'UserController@create')->name('dashboard.users.create');
+    Route::post('/users', 'UserController@store')->name('dashboard.users.store');
     Route::get('/users/edit/{id}', 'UserController@edit')->name('dashboard.users.edit');
-    Route::put('/users/edit/{id}', 'UserController@update')->name('dashboard.users.update');
-    Route::delete('/users/edit/{id}', 'UserController@destroy')->name('dashboard.users.destroy');
+    Route::put('/users/{id}', 'UserController@update')->name('dashboard.users.update');
+    Route::delete('/users/{id}', 'UserController@destroy')->name('dashboard.users.destroy');
   });
 
   // user-higher
   Route::group(['middleware' => ['auth', 'can:editor-higher']], function () {
-    Route::get('/users/create', 'UserController@create')->name('dashboard.users.create');
-    Route::post('/users/create', 'UserController@store')->name('dashboard.users.store');
   });
   
   // editor-higher
@@ -42,6 +42,10 @@ Route::prefix('dashboard')->namespace('Dashboard')->group(function() {
     Route::get('/tags/edit/{id}', 'TagController@edit')->name('dashboard.tags.edit');
     Route::put('/tags/{id}', 'TagController@update')->name('dashboard.tags.update');
     Route::delete('/tags/{id}', 'TagController@destroy')->name('dashboard.tags.destroy');
+  });
+
+  // all-user
+  Route::group(['middleware' => 'auth'], function () {
   });
 });
 
