@@ -49,8 +49,11 @@ class UserController extends Controller
             ->with('flash', 'Nice! You completed registration new user successfully.');
     }
 
-    public function edit($id)
+    public function edit($id = null) 
     {
+        if ($id === null) {
+            $id = Auth::id();
+        }
         $user = User::findOrFail($id);
         return view('dashboard.users.edit', ['user' => $user, 'roles' => $this->getAccessibleRoles()]);
     }
