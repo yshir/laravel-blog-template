@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 
-use App\User;
-
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+
+use Intervention\Image\ImageManagerStatic as Image;
+
+use App\User;
 
 class UserController extends Controller
 {
@@ -23,6 +25,15 @@ class UserController extends Controller
             'editor',
         ];
         return array_slice($roles, array_search(Auth::user()->role, $roles));
+    }
+
+    private function uploadAvatar($image) {
+        $path = public_path().'/img/avatars';
+        $fileName = uniqid().'.jpg';
+        $image = Image::make($image)
+            ->fit(780, 520)
+            ->save($path.'/'.$fileName, 70);
+        return $fileName;
     }
 
     public function index()
@@ -39,6 +50,11 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $user = new User;
+
+        if (isset($request->avatar)) {
+            $user->avatar = $this->uploadAvatar($request->avatar);
+        }
+
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
@@ -70,6 +86,11 @@ class UserController extends Controller
         ]);
             
         $user = User::findOrFail($id);
+
+        if (isset($request->avatar)) {
+            $user->avatar = $this->uploadAvatar($request->avatar);
+        }
+
         $user->name = $request->name;
         $user->nickname = $request->nickname;
         $user->email = $request->email;

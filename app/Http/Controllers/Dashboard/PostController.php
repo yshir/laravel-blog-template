@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+use Carbon\Carbon;
+
+use Intervention\Image\ImageManagerStatic as Image;
 
 use App\Model\Post;
 use App\Model\Category;
-use Carbon\Carbon;
 
 class PostController extends Controller
 {
-    public function canWriteAll() 
+    private function canWriteAll() 
     {
         $allowed = [
             'system',
@@ -21,6 +24,15 @@ class PostController extends Controller
             'user',
         ];
         return in_array(Auth::user()->role, $allowed);
+    }
+
+    private function uploadThumbnail($image) {
+        $path = public_path().'/img/posts';
+        $fileName = uniqid().'.jpg';
+        $image = Image::make($image)
+            ->fit(780, 520)
+            ->save($path.'/'.$fileName, 70);
+        return $fileName;
     }
 
     public function index()
@@ -38,16 +50,21 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('dashboard.posts.create', ['categories' => $categories, 'canWriteAll' => $this->canWriteAll()])
-            ->with('flash', 'Nice! You completed creating new post successfully.');
+        return view('dashboard.posts.create', ['categories' => $categories, 'canWriteAll' => $this->canWriteAll()]);
     }
 
     public function store(Request $request)
     {
         $inputs = $request->all();
         $inputs['user_id'] = $request->user()->id;
+        
+        if (isset($inputs['thumbnail'])) {
+            $inputs['thumbnail'] = $this->uploadThumbnail(Input::file('thumbnail'));
+        }
+
         Post::create($inputs);
-        return redirect()->route('dashboard.posts.index');
+        return redirect()->route('dashboard.posts.index')
+            ->with('flash', 'Nice! You completed creating new post successfully.');
     }
 
     public function edit($id)
@@ -63,15 +80,23 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         $post = Post::findOrFail($id);
-        $post->fill($request->all())->save();
+        $inputs = $request->all();
+
+        if (isset($inputs['thumbnail'])) {
+            $inputs['thumbnail'] = $this->uploadThumbnail($inputs['thumbnail']);
+        }
+
+        $post->fill($inputs)->save();
         return redirect()->route('dashboard.posts.index')
-        ->with('flash', 'Nice! You completed updating new post successfully.');
+            ->with('flash', 'Nice! You completed updating new post successfully.');
     }
 
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
+        $title = $post->title;
         $post->delete();
-        return redirect()->route('dashboard.posts.index');
+        return redirect()->route('dashboard.posts.index')
+            ->with('flash', 'Post "'.$title.'" was deleted.');
     }
 }

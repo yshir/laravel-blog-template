@@ -13,7 +13,7 @@
                     </div>
                     <div class="content">
                         <div class="author">
-                          <img class="avatar border-white" src="{{ $user->avatar }}" alt="..."/>
+                          <img class="avatar border-white" id="preview" src="{{ isset($user->avatar) ? asset('img/avatars/'.$user->avatar) : asset('img/avatars/default_avatar.jpg') }}" alt="..."/>
                           <h4 class="title">{{ $user->name }}<br />
                              <a href="#"><small>{{ isset($user->nickname) ? '@'.$user->nickname : '@'.$user->name }}</small></a>
                           </h4>
@@ -127,6 +127,20 @@
 
                             <input type="hidden" name="id" value="{{ $user->id }}">
 
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="avatar">Avatar</label>
+                                        <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" class="" value="{{ old('avatar') }}">
+                                        @if ($errors->has('avatar'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('avatar') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
                             {{-- <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -188,4 +202,21 @@ But that's the difference in our opinions.</textarea>
         </div>
     </div>
 </div>
+@endsection
+
+@section('add_script')
+{{-- formで選択した画像をプレビュー --}}
+<script>
+    var file = document.querySelector('#avatar');
+    file.onchange = function (){
+      var fileList = file.files;
+      //読み込み
+      var reader = new FileReader();
+      reader.readAsDataURL(fileList[0]); 
+      //読み込み後
+      reader.onload = function  () {
+        document.querySelector('#preview').src = reader.result;
+      };
+    };
+    </script> 
 @endsection

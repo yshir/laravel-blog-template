@@ -21,7 +21,7 @@
   <tbody>
       @foreach ($users as $user)
         <tr>
-            <td style="text-align:center;"><img class="avatar border-white" src="{{ $user->avatar }}" alt="..."/></td>
+            <td style="text-align:center;"><img class="avatar border-white" src="{{ isset($user->avatar) ? asset('img/avatars/'.$user->avatar) : asset('img/avatars/default_avatar.jpg') }}" alt="..."/></td>
             <td>{{ isset($user->nickname) ? $user->nickname : $user->name }}</td>
             <td>{{ $user->role }}</td>
             <td>{{ $user->email }}</td>

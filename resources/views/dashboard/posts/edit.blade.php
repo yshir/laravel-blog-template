@@ -8,23 +8,9 @@
         <div class="row">
             <div class="col-lg-4 col-md-5">
                 <div class="card card-post">
-                    <div class="image">
-                      <img src="{{ asset('paper-dashboard/img/background.jpg') }}" alt="..."/>
+                    <div class="image" style="height: auto;">
+                      <img src="{{ isset($post->thumbnail) ? asset('img/posts/'.$post->thumbnail) : asset('img/posts/default.jpg') }}" id="preview" alt="thumbnail_preview"/>
                     </div>
-                    <div class="content">
-                        {{-- <div class="author">
-                          <img class="avatar border-white" src="{{ $post->avatar }}" alt="..."/>
-                          <h4 class="title">{{ $post->name }}<br />
-                             <a href="#"><small>{{ isset($post->nickname) ? '@'.$post->nickname : '@'.$post->name }}</small></a>
-                          </h4>
-                        </div> --}}
-                        <p class="description text-center">
-                            "I like the way you work it <br>
-                            No diggity <br>
-                            I wanna bag it up"
-                        </p>
-                    </div>
-                    <hr>
                     <div class="text-center">
                         <div class="row">
                             <div class="col-md-3 col-md-offset-1">
@@ -39,12 +25,13 @@
                         </div>
                     </div>
                     @if ($canWriteAll)
+                        <hr style="margin: 0;">
                         <div class="text-center">
                             <div class="row">
                                 <form action="{{ route('dashboard.posts.destroy', $post->id) }}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger" style="margin: 20px;">
+                                    <button type="submit" id="delete" class="submit btn btn-danger" style="margin: 20px;">
                                         {{ __('Delete') }}
                                     </button>
                                 </form>
@@ -158,6 +145,20 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                        <label for="thumbnail">Thumbnail</label>
+                                        <input type="file" id="thumbnail" name="thumbnail" accept="image/png, image/jpeg" class="" value="{{ $post->thumbnail }}">
+                                        @if ($errors->has('thumbnail'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('thumbnail') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
                                         <label name="body">Body</label>
                                         <textarea id="body" name="body" class="form-control" placeholder="Here can be your nice text" rows="10" required>{{ $post->body }}</textarea>
                                         @if ($errors->has('body'))
@@ -240,7 +241,7 @@
                             </div>
 
                             <div class="text-center">
-                                <button type="submit" style="margin: 20px;" class="btn btn-info btn-fill btn-wd">Save</button>
+                                <button type="submit" id="update" style="margin: 20px;" class="btn btn-info btn-fill btn-wd">Save</button>
                             </div>
                             <div class="clearfix"></div>
 
@@ -254,6 +255,8 @@
 @endsection
 
 @section('add_script')
+
+{{-- tinymceのセットアップ --}}
 <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
 <script>
 tinymce.init({
@@ -266,13 +269,31 @@ tinymce.init({
 });
 </script>
 
+{{-- formで選択した画像をプレビュー --}}
 <script>
-// ページを離れようとした際に、アラートを表示する
+var file = document.querySelector('#thumbnail');
+file.onchange = function (){
+  var fileList = file.files;
+  //読み込み
+  var reader = new FileReader();
+  reader.readAsDataURL(fileList[0]); 
+  //読み込み後
+  reader.onload = function  () {
+    document.querySelector('#preview').src = reader.result;
+  };
+};
+</script> 
+
+{{-- ページを離れようとした際に、アラートを表示する --}}
+<script>
 var onBeforeunloadHandler = function(e) {
     e.returnValue = '記事の編集途中ですが、このページを離れても大丈夫ですか？';
 };
 window.addEventListener('beforeunload', onBeforeunloadHandler, false);
-document.querySelector('button[type="submit"]').addEventListener('click', function(e) { // submitであれば通す
+document.querySelector('#update').addEventListener('click', function(e) {
+    window.removeEventListener('beforeunload', onBeforeunloadHandler);
+}, false);
+document.querySelector('#delete').addEventListener('click', function(e) {
     window.removeEventListener('beforeunload', onBeforeunloadHandler);
 }, false);
 </script>
