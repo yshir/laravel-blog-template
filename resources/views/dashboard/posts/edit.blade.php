@@ -173,6 +173,24 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                        <label name="tag">Tag</label>
+                                        <textarea id="tagify" name="tag" class="form-control">
+                                            @foreach ($post->tags as $tag)
+                                                {{ $tag->name.',' }} 
+                                            @endforeach
+                                        </textarea>
+                                        @if ($errors->has('tag'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('tag') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
                                         <label for="canonical">Canonical (optional)</label>
                                         <input type="text" name="canonical" class="form-control border-input" placeholder="Duplicated page URL: https://example.com/foo/bar " value="{{ $post->canonical }}" {{ $canWriteAll ? '' : 'readonly' }}>
                                         @if ($errors->has('canonical'))
@@ -254,7 +272,13 @@
 </div>
 @endsection
 
+@section('add_css')
+<link rel="stylesheet" href="{{ asset('css/tagify-style.css') }}" />
+@endsection
+
 @section('add_script')
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
 
 {{-- tinymceのセットアップ --}}
 <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
@@ -282,7 +306,18 @@ file.onchange = function (){
     document.querySelector('#preview').src = reader.result;
   };
 };
-</script> 
+</script>
+
+{{-- tagify --}}
+<script type="text/javascript" src="{{ asset('js/jquery.tagify.js') }}"></script>
+<script type="text/javascript">
+$(function() {
+	$('#tagify').tagify();
+	$('form').submit(function() {
+		$('#tagify').tagify('serialize');
+	});
+});
+</script>
 
 {{-- ページを離れようとした際に、アラートを表示する --}}
 <script>
@@ -297,4 +332,5 @@ document.querySelector('#delete').addEventListener('click', function(e) {
     window.removeEventListener('beforeunload', onBeforeunloadHandler);
 }, false);
 </script>
+
 @endsection

@@ -13,6 +13,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 use App\Model\Post;
 use App\Model\Category;
+use App\Model\Tag;
 
 class PostController extends Controller
 {
@@ -84,6 +85,23 @@ class PostController extends Controller
 
         if (isset($inputs['thumbnail'])) {
             $inputs['thumbnail'] = $this->uploadThumbnail($inputs['thumbnail']);
+        }
+
+        if (isset($inputs['tag'])) {
+            $tagNames = array_unique(explode(',', $inputs['tag']));
+            $tagIds = [];
+            foreach ($tagNames as $tagName) {
+                $tag = Tag::where('name', $tagName)->first();
+                // tagがなければ追加する
+                if ($tag === null) {
+                    $tag = Tag::create([
+                        'name' => $tagName,
+                        'slug' => $tagName,
+                    ]);
+                }
+                array_push($tagIds, $tag->id);
+            }
+            $post->tags()->sync($tagIds);
         }
 
         $post->fill($inputs)->save();
